@@ -1,16 +1,20 @@
 import React, { useRef, useContext, useState } from "react";
-import NavBar from "../Header/NavBar";
 import { Button, Container, Form } from "react-bootstrap";
 import AuthContext from "../../Store/auth-context";
-
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import NavBar from "../Header/NavBar";
 const Login = () => {
   const [islogin, setIsLogin] = useState(true);
+  const [show, setShow] = useState(false);
   const authCtx = useContext(AuthContext);
   const emailRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
   const toggleHandler = () => {
     setIsLogin((prevState) => !prevState);
+  };
+  const eyeHandler = () => {
+    setShow((prevState) => !prevState);
   };
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -72,10 +76,9 @@ const Login = () => {
         }
         authCtx.login(data.idToken);
         alert("Logged In successfully");
-        
+
         emailRef.current.value = "";
         passwordRef.current.value = "";
-      
       } catch (error) {
         alert(error.message);
       }
@@ -86,12 +89,17 @@ const Login = () => {
     <>
       <NavBar />
       <Container
-        style={{ width: "40%", border: "1px solid Black", padding: "20px" }}
+        style={{
+          marginTop: "5%",
+          width: "40%",
+          padding: "20px",
+          boxShadow: "5px 4px 15px 10px #888888",
+        }}
       >
-        <h4 style={{ textAlign: "center", padding: "10px" }}>
+        <h3 style={{ textAlign: "center", padding: "10px" }}>
           {" "}
           {islogin ? "Login" : "Sign up"}
-        </h4>
+        </h3>
         <Form onSubmit={submitHandler}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
@@ -102,14 +110,29 @@ const Login = () => {
               required
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group
+            className="mb-3"
+            controlId="formBasicPassword"
+            style={{ position: "relative" }}
+          >
             <Form.Label>Password</Form.Label>
             <Form.Control
-              type="password"
+              type={show ? "text" : "password"}
               placeholder="Password"
               ref={passwordRef}
               required
-            />
+            ></Form.Control>
+            <p
+              style={{
+                position: "absolute",
+                top: "40px",
+                right: "10px",
+                cursor: "pointer",
+              }}
+              onClick={eyeHandler}
+            >
+              {show ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+            </p>
           </Form.Group>
           {!islogin && (
             <Form.Group
@@ -124,6 +147,18 @@ const Login = () => {
                 required
               />
             </Form.Group>
+          )}
+          {islogin && (
+            <Button
+              variant="link"
+              style={{
+                textDecoration: "none",
+                padding: "10px",
+                width: "100%",
+              }}
+            >
+              Forgot your password?
+            </Button>
           )}
           <Button
             style={{ width: "100%", borderRadius: "20px" }}
@@ -143,9 +178,11 @@ const Login = () => {
           backgroundColor: "#E8EEF1",
         }}
       >
-        <button
+        <Button
+          variant="link"
           onClick={toggleHandler}
           style={{
+            textDecoration: "none",
             backgroundColor: "#E8EEF1",
             borderColor: "none",
             padding: "10px",
@@ -155,7 +192,7 @@ const Login = () => {
           {islogin
             ? "Dont have an account?Create Account"
             : "Have an account?Login"}
-        </button>
+        </Button>
       </Container>
     </>
   );

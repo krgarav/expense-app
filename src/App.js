@@ -5,16 +5,30 @@ import Login from "./Components/Login/Login";
 import { Navigate, Route, Routes } from "react-router-dom";
 import AuthContext from "./Store/auth-context";
 import Expense from "./Components/Body/Expense";
+import NavBar from "./Components/Header/NavBar";
+import Profile from "./Components/Pages/Profile";
 function App() {
   const authCtx = useContext(AuthContext);
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/login" replace="true" />}></Route>
-      {!authCtx.isLoggedIn && <Route path="/login" element={<Login />}></Route>}
-      {authCtx.isLoggedIn && (
-        <Route path="/login" element={<Expense />}></Route>
-      )}
-    </Routes>
+    <>
+      
+      <Routes>
+        <Route
+          path="/"
+          element={<Navigate to="/login" replace="true" />}
+        ></Route>
+        {!authCtx.isLoggedIn && (
+          <Route path="/login" element={<Login />}></Route>
+        )}
+        {authCtx.isLoggedIn && (
+          <Route path="/login" element={<Expense />}></Route>
+        )}
+         {authCtx.isLoggedIn && (
+          <Route path="/profile" element={<Profile />}></Route>
+        )}
+      </Routes>
+    
+    </>
   );
 }
 
