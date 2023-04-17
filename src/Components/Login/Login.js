@@ -3,10 +3,12 @@ import { Button, Container, Form } from "react-bootstrap";
 import AuthContext from "../../Store/auth-context";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import NavBar from "../Header/NavBar";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [islogin, setIsLogin] = useState(true);
   const [show, setShow] = useState(false);
   const authCtx = useContext(AuthContext);
+  const navigate = useNavigate();
   const emailRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
@@ -15,6 +17,9 @@ const Login = () => {
   };
   const eyeHandler = () => {
     setShow((prevState) => !prevState);
+  };
+  const forgotHandler = () => {
+    navigate("/reset");
   };
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -74,7 +79,7 @@ const Login = () => {
         if (data.error) {
           throw data.error;
         }
-        console.log(data)
+        console.log(data);
         authCtx.login(data.idToken);
         alert("Logged In successfully");
 
@@ -151,6 +156,7 @@ const Login = () => {
           )}
           {islogin && (
             <Button
+              onClick={forgotHandler}
               variant="link"
               style={{
                 textDecoration: "none",

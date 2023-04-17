@@ -8,6 +8,7 @@ import Expense from "./Components/Body/Expense";
 import NavBar from "./Components/Header/NavBar";
 import Profile from "./Components/Pages/Profile";
 import EditProfile from "./Components/Pages/EditProfile";
+import Reset from "./Components/Pages/Reset";
 function App() {
   const authCtx = useContext(AuthContext);
   return (
@@ -24,11 +25,18 @@ function App() {
           <Route path="/login" element={<Expense />}></Route>
         )}
         {authCtx.isLoggedIn && (
+          <Route path="/expense" element={<Expense />}></Route>
+        )}
+        {!authCtx.isLoggedIn && (
+          <Route path="/expense" element={<Login />}></Route>
+        )}
+        {authCtx.isLoggedIn && (
           <Route path="/profile" element={<Profile />}></Route>
         )}
         {authCtx.isLoggedIn && (
           <Route path="/editprofile" element={<EditProfile />}></Route>
         )}
+        <Route path="/reset" element={<Reset/>} />
       </Routes>
     </>
   );
