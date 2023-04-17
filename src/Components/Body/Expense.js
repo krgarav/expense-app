@@ -1,15 +1,32 @@
-import React, { useContext } from "react";
-import { Button } from "react-bootstrap";
+import React, { useContext, useRef } from "react";
+import { Button, Col, Container, Form, ListGroup, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../Store/auth-context";
+import ListContext from "../../Store/list-context";
 
 const Expense = () => {
   const authCtx = useContext(AuthContext);
+  const listCtx = useContext(ListContext);
   const navigate = useNavigate();
+  const amountRef = useRef();
+  const descriptionRef = useRef();
+  const categoryRef = useRef();
   const profileHandler = () => {
     navigate("/profile", { replace: "true" });
   };
-
+  const submitHandler = (event) => {
+    event.preventDefault();
+    const enteredAmount = amountRef.current.value;
+    const enteredDescription = descriptionRef.current.value;
+    const enteredCategory = categoryRef.current.value;
+    console.log(enteredAmount, enteredDescription, enteredCategory);
+    const itemObj = {
+      amount: enteredAmount,
+      description: enteredDescription,
+      category: enteredCategory,
+    };
+    listCtx.addListItem(itemObj);
+  };
   const logoutHandler = () => {
     authCtx.logout();
   };
@@ -38,6 +55,25 @@ const Expense = () => {
       console.log(error);
     }
   };
+
+  const listItems = listCtx.listItems.map((item) => {
+    return (
+      <ListGroup.Item as="li">
+        <Container>
+          <Row>
+            <Col>{item.amount}</Col>
+            <Col>{item.description}</Col>
+            <Col>{item.category}</Col>
+            <Col>
+              <Button variant="outline-danger">Delete</Button>
+            </Col>
+          </Row>
+        </Container>
+
+        {/* {`${item.amount}   ${item.amount}   ${item.amount}`} */}
+      </ListGroup.Item>
+    );
+  });
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -62,6 +98,53 @@ const Expense = () => {
       </div>
       <hr />
       <Button onClick={verifyHandler}>Verify Email</Button>
+
+      <Container
+        style={{
+          width: "70%",
+          backgroundColor: "#99CCFF",
+          borderRadius: "20px",
+          textAlign: "center",
+        }}
+      >
+        <h1>Add Items</h1>
+
+        <Form onSubmit={submitHandler}>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Amount</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Enter Amount "
+              ref={amountRef}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Description</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Add description"
+              ref={descriptionRef}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Category</Form.Label>
+            <Form.Select ref={categoryRef}>
+              <option>Food</option>
+              <option>Petrol</option>
+              <option>Salary</option>
+            </Form.Select>
+          </Form.Group>
+
+          <Button style={{ margin: "10px" }} variant="primary" type="submit">
+            Add
+          </Button>
+        </Form>
+      </Container>
+      <Container style={{ textAlign: "center" }}>
+        <h1>Expense Items</h1>
+        <ListGroup as="ul">{listItems}</ListGroup>
+      </Container>
     </div>
   );
 };
