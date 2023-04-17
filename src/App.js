@@ -7,6 +7,7 @@ import AuthContext from "./Store/auth-context";
 import Expense from "./Components/Body/Expense";
 import NavBar from "./Components/Header/NavBar";
 import Profile from "./Components/Pages/Profile";
+import EditProfile from "./Components/Pages/EditProfile";
 function App() {
   const authCtx = useContext(AuthContext);
   return (
@@ -25,6 +26,9 @@ function App() {
         )}
          {authCtx.isLoggedIn && (
           <Route path="/profile" element={<Profile />}></Route>
+        )}
+         {authCtx.isLoggedIn && (
+          <Route path="/editprofile" element={<EditProfile />}></Route>
         )}
       </Routes>
     

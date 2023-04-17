@@ -74,6 +74,7 @@ const Login = () => {
         if (data.error) {
           throw data.error;
         }
+        console.log(data)
         authCtx.login(data.idToken);
         alert("Logged In successfully");
 

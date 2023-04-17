@@ -1,15 +1,40 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import AuthContext from "../../Store/auth-context";
+import { AiFillGithub } from "react-icons/ai";
+import { TbWorld } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 const Profile = () => {
+  const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
   const fullNameRef = useRef();
   const urlRef = useRef();
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDjLyQ010cmXK_RdE626y3mSLl1E1Y03-c",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            idToken: authCtx.token,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data.users[0].displayName);
+      fullNameRef.current.value = data.users[0].displayName;
+      urlRef.current.value = data.users[0].photoUrl;
+    };
+    fetchData();
+  }, []);
   const updateHandler = async (event) => {
     event.preventDefault();
     const enteredFullName = fullNameRef.current.value;
     const enteredUrlName = urlRef.current.value;
-    console.log(authCtx.token)
+
     try {
       const response = await fetch(
         "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDjLyQ010cmXK_RdE626y3mSLl1E1Y03-c",
@@ -22,16 +47,17 @@ const Profile = () => {
             returnSecureToken: true,
           }),
           headers: {
-            "Context-Type": "application/json",
+            "Content-Type": "application/json",
           },
         }
       );
       const data = await response.json();
       if (data.error) {
-        throw data.error;
+        throw data;
       }
-      console.log(data.idToken);
+      console.log(data.displayName, data.photoUrl);
     } catch (error) {
+      console.log(error);
       alert(error.message);
     }
   };
@@ -72,12 +98,19 @@ const Profile = () => {
 
         <Form onSubmit={updateHandler}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Full Name</Form.Label>
+            <Form.Label>
+              {" "}
+              <AiFillGithub />
+              Full Name
+            </Form.Label>
             <Form.Control type="text" ref={fullNameRef} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Profile Photo URL</Form.Label>
+            <Form.Label>
+              <TbWorld />
+              Profile Photo URL
+            </Form.Label>
             <Form.Control type="text" ref={urlRef} />
           </Form.Group>
           <Button variant="primary" type="submit">
