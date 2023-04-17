@@ -30,6 +30,9 @@ const Profile = () => {
     };
     fetchData();
   }, []);
+  const cancelHandler=()=>{
+    
+  }
   const updateHandler = async (event) => {
     event.preventDefault();
     const enteredFullName = fullNameRef.current.value;
@@ -93,13 +96,12 @@ const Profile = () => {
       <Container style={{ width: "500px" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h2>Contact detail</h2>
-          <Button variant="outline-danger">Cancel</Button>
+          <Button onClick={cancelHandler} variant="outline-danger">Cancel</Button>
         </div>
 
         <Form onSubmit={updateHandler}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>
-              {" "}
               <AiFillGithub />
               Full Name
             </Form.Label>

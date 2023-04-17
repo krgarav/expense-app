@@ -10,37 +10,39 @@ const Expense = () => {
     navigate("/profile", { replace: "true" });
   };
 
+  const logoutHandler = () => {
+    authCtx.logout();
+  };
   const verifyHandler = async () => {
-    try{
-    const response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyDjLyQ010cmXK_RdE626y3mSLl1E1Y03-c",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          requestType: "VERIFY_EMAIL",
-          idToken: authCtx.token,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
+    try {
+      const response = await fetch(
+        "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyDjLyQ010cmXK_RdE626y3mSLl1E1Y03-c",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            requestType: "VERIFY_EMAIL",
+            idToken: authCtx.token,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      if (data.error) {
+        throw data;
       }
-    );
-    const data = await response.json();
-    if(data.error){
-      throw data
+      console.log(data);
+    } catch (error) {
+      alert(error.message);
+      console.log(error);
     }
-    console.log(data);
-    }catch(error){
-      alert(error.message)
-      console.log(error)
-    }
-
   };
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <h1>Welcome To Expense Tracker!!!</h1>
-        <div style={{ display: "flex" }}>
+        <div>
           <span>
             <p>
               Your Profile is Incomplete.{" "}
@@ -49,6 +51,13 @@ const Expense = () => {
               </span>
             </p>
           </span>
+          <Button
+            style={{ float: "right" }}
+            onClick={logoutHandler}
+            variant="danger"
+          >
+            Logout
+          </Button>
         </div>
       </div>
       <hr />

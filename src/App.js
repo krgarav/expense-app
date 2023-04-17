@@ -12,7 +12,6 @@ function App() {
   const authCtx = useContext(AuthContext);
   return (
     <>
-      
       <Routes>
         <Route
           path="/"
@@ -24,14 +23,13 @@ function App() {
         {authCtx.isLoggedIn && (
           <Route path="/login" element={<Expense />}></Route>
         )}
-         {authCtx.isLoggedIn && (
+        {authCtx.isLoggedIn && (
           <Route path="/profile" element={<Profile />}></Route>
         )}
-         {authCtx.isLoggedIn && (
+        {authCtx.isLoggedIn && (
           <Route path="/editprofile" element={<EditProfile />}></Route>
         )}
       </Routes>
-    
     </>
   );
 }
