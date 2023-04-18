@@ -56,6 +56,37 @@ const listReducer = (state, action) => {
     const item = action.item.updateItems;
     return { listItems: item };
   }
+  if (action.type === "REMOVE") {
+    const updateItems = state.listItems.filter((item) => {
+      return item.description !== action.id;
+    });
+
+    if (state.listItems.length !== 0) {
+      const id = localStorage.getItem("id");
+      const response = fetch(
+        "https://expense-app-e491d-default-rtdb.firebaseio.com/items/" +
+          id +
+          ".json",
+        {
+          method: "PUT",
+          body: JSON.stringify({ updateItems }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } else {
+      const id = localStorage.getItem("id");
+      const response = fetch(
+        "https://expense-app-e491d-default-rtdb.firebaseio.com/" + id + ".json",
+        {
+          method: "DELETE",
+        }
+      );
+    }
+
+    return { listItems: updateItems };
+  }
   return defaultState;
 };
 export const ListProvider = (props) => {
@@ -83,7 +114,9 @@ export const ListProvider = (props) => {
   const addListItemHandler = (item) => {
     dispatchListState({ type: "ADD", item: item });
   };
-  const removeListItemHandler = () => {};
+  const removeListItemHandler = (id) => {
+    dispatchListState({ type: "REMOVE", id: id });
+  };
   const listContext = {
     listItems: listState.listItems,
     addListItem: addListItemHandler,

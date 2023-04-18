@@ -10,15 +10,11 @@ import { BrowserRouter } from "react-router-dom";
 import { ListProvider } from "./Store/list-context";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
+  <BrowserRouter>
     <ListProvider>
       <AuthContextProvider>
-      
-          <App />
-        
+        <App />
       </AuthContextProvider>
-      </ListProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+    </ListProvider>
+  </BrowserRouter>
 );

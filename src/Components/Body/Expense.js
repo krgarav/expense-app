@@ -14,19 +14,18 @@ const Expense = () => {
   const profileHandler = () => {
     navigate("/profile", { replace: "true" });
   };
-  const submitHandler = async(event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
     const enteredAmount = amountRef.current.value;
     const enteredDescription = descriptionRef.current.value;
     const enteredCategory = categoryRef.current.value;
-    console.log(enteredAmount, enteredDescription, enteredCategory);
+
     const itemObj = {
       amount: enteredAmount,
       description: enteredDescription,
       category: enteredCategory,
     };
     listCtx.addListItem(itemObj);
-    
   };
   const logoutHandler = () => {
     authCtx.logout();
@@ -56,10 +55,20 @@ const Expense = () => {
       console.log(error);
     }
   };
-  const deleteHandler=()=>{
-
-  }
-
+  const deleteHandler = (item) => {
+    const description = item.target.parentNode.parentNode.children[1].innerText;
+    
+    listCtx.removeListItem(description);
+  };
+  const editHandler = (item) => {
+    const price = item.target.parentNode.parentNode.children[0].innerText;
+    const description = item.target.parentNode.parentNode.children[1].innerText;
+    const category = item.target.parentNode.parentNode.children[2].innerText;
+    amountRef.current.value = price;
+    descriptionRef.current.value = description;
+    categoryRef.current.value = category;
+    listCtx.removeListItem(description);
+  };
   const listItems = listCtx.listItems.map((item) => {
     return (
       <ListGroup.Item as="li" key={item.description}>
@@ -69,7 +78,14 @@ const Expense = () => {
             <Col>{item.description}</Col>
             <Col>{item.category}</Col>
             <Col>
-              <Button onClick={deleteHandler} variant="outline-danger">Delete</Button>
+              <Button onClick={editHandler} variant="outline-warning">
+                Edit
+              </Button>
+            </Col>
+            <Col>
+              <Button onClick={deleteHandler} variant="outline-danger">
+                Delete
+              </Button>
             </Col>
           </Row>
         </Container>
