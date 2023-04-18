@@ -14,7 +14,7 @@ const Expense = () => {
   const profileHandler = () => {
     navigate("/profile", { replace: "true" });
   };
-  const submitHandler = (event) => {
+  const submitHandler = async(event) => {
     event.preventDefault();
     const enteredAmount = amountRef.current.value;
     const enteredDescription = descriptionRef.current.value;
@@ -26,6 +26,7 @@ const Expense = () => {
       category: enteredCategory,
     };
     listCtx.addListItem(itemObj);
+    
   };
   const logoutHandler = () => {
     authCtx.logout();
@@ -55,22 +56,23 @@ const Expense = () => {
       console.log(error);
     }
   };
+  const deleteHandler=()=>{
+
+  }
 
   const listItems = listCtx.listItems.map((item) => {
     return (
-      <ListGroup.Item as="li">
+      <ListGroup.Item as="li" key={item.description}>
         <Container>
           <Row>
             <Col>{item.amount}</Col>
             <Col>{item.description}</Col>
             <Col>{item.category}</Col>
             <Col>
-              <Button variant="outline-danger">Delete</Button>
+              <Button onClick={deleteHandler} variant="outline-danger">Delete</Button>
             </Col>
           </Row>
         </Container>
-
-        {/* {`${item.amount}   ${item.amount}   ${item.amount}`} */}
       </ListGroup.Item>
     );
   });
