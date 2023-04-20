@@ -30,7 +30,7 @@ const Reset = () => {
         throw data.error;
       }
       alert("Verification link sent Successfull");
-      navigate("/login")
+      navigate("/login");
     } catch (error) {
       alert(error.message);
     }

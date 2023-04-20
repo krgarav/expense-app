@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Form, Button, Container } from "react-bootstrap";
-import AuthContext from "../../Store/auth-context";
 import { AiFillGithub } from "react-icons/ai";
 import { TbWorld } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const Profile = () => {
+const bearer_token = useSelector((state)=>state.auth.bearer_token);
   const navigate = useNavigate();
-  const authCtx = useContext(AuthContext);
   const fullNameRef = useRef();
   const urlRef = useRef();
   useEffect(() => {
@@ -16,7 +16,7 @@ const Profile = () => {
         {
           method: "POST",
           body: JSON.stringify({
-            idToken: authCtx.token,
+            idToken: bearer_token,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -29,7 +29,7 @@ const Profile = () => {
       urlRef.current.value = data.users[0].photoUrl;
     };
     fetchData();
-  }, []);
+  }, [bearer_token]);
   const cancelHandler = () => {
     navigate("/expense");
   };
@@ -44,7 +44,7 @@ const Profile = () => {
         {
           method: "POST",
           body: JSON.stringify({
-            idToken: authCtx.token,
+            idToken: bearer_token,
             displayName: enteredFullName,
             photoUrl: enteredUrlName,
             returnSecureToken: true,

@@ -1,13 +1,15 @@
-import React, { useRef, useContext, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import AuthContext from "../../Store/auth-context";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import NavBar from "../Header/NavBar";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../Store/auth-reducer";
 const Login = () => {
+  const dispatch = useDispatch();
   const [islogin, setIsLogin] = useState(true);
   const [show, setShow] = useState(false);
-  const authCtx = useContext(AuthContext);
+
   const navigate = useNavigate();
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -79,8 +81,7 @@ const Login = () => {
         if (data.error) {
           throw data.error;
         }
-        console.log(data);
-        authCtx.login(data.idToken);
+        dispatch(authActions.login(data.idToken));
         alert("Logged In successfully");
 
         emailRef.current.value = "";

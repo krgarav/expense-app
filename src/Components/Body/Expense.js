@@ -1,11 +1,16 @@
 import React, { useContext, useRef } from "react";
 import { Button, Col, Container, Form, ListGroup, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../../Store/auth-context";
 import ListContext from "../../Store/list-context";
-
+import { useSelector, useDispatch } from "react-redux";
+import { authActions } from "../../Store/auth-reducer";
+import { expenseAction } from "../../Store/expense-reducer";
 const Expense = () => {
-  const authCtx = useContext(AuthContext);
+  const listItem = useSelector((state) => state.expense.expense);
+  const bearer_token = useSelector((state) => state.auth.bearer_token);
+  const totalAmt = useSelector((state) => state.expense.totalAmount);
+ console.log(totalAmt)
+  const dispatch = useDispatch();
   const listCtx = useContext(ListContext);
   const navigate = useNavigate();
   const amountRef = useRef();
@@ -25,10 +30,10 @@ const Expense = () => {
       description: enteredDescription,
       category: enteredCategory,
     };
-    listCtx.addListItem(itemObj);
+    dispatch(expenseAction.addExpense(itemObj));
   };
   const logoutHandler = () => {
-    authCtx.logout();
+    dispatch(authActions.logout());
   };
   const verifyHandler = async () => {
     try {
@@ -38,7 +43,7 @@ const Expense = () => {
           method: "POST",
           body: JSON.stringify({
             requestType: "VERIFY_EMAIL",
-            idToken: authCtx.token,
+            idToken: bearer_token,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -57,8 +62,7 @@ const Expense = () => {
   };
   const deleteHandler = (item) => {
     const description = item.target.parentNode.parentNode.children[1].innerText;
-    
-    listCtx.removeListItem(description);
+    dispatch(expenseAction.removeExpense(description));
   };
   const editHandler = (item) => {
     const price = item.target.parentNode.parentNode.children[0].innerText;
@@ -67,9 +71,9 @@ const Expense = () => {
     amountRef.current.value = price;
     descriptionRef.current.value = description;
     categoryRef.current.value = category;
-    listCtx.removeListItem(description);
+    dispatch(expenseAction.removeExpense(description));
   };
-  const listItems = listCtx.listItems.map((item) => {
+  const listItems = listItem.map((item) => {
     return (
       <ListGroup.Item as="li" key={item.description}>
         <Container>
@@ -105,6 +109,7 @@ const Expense = () => {
               </span>
             </p>
           </span>
+          {totalAmt > 10000 && <Button>Activate Premium</Button>}
           <Button
             style={{ float: "right" }}
             onClick={logoutHandler}
