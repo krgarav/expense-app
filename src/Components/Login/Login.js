@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import NavBar from "../Header/NavBar";
@@ -81,6 +81,7 @@ const Login = () => {
         if (data.error) {
           throw data.error;
         }
+ 
         dispatch(authActions.login(data.idToken));
         alert("Logged In successfully");
 
@@ -93,14 +94,15 @@ const Login = () => {
   };
 
   return (
-    <>
+    <Fragment>
       <NavBar />
       <Container
         style={{
           marginTop: "5%",
           width: "40%",
           padding: "20px",
-          boxShadow: "5px 4px 15px 10px #888888",
+          boxShadow: "5px 4px 15px 10px #D3D3D3",
+          borderRadius: "5px",
         }}
       >
         <h3 style={{ textAlign: "center", padding: "10px" }}>
@@ -202,7 +204,7 @@ const Login = () => {
             : "Have an account?Login"}
         </Button>
       </Container>
-    </>
+    </Fragment>
   );
 };
 export default Login;

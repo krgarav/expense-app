@@ -1,0 +1,15 @@
+.body {
+  background-color: black;
+  color: aliceblue;
+}
+
+.firstdiv {
+  display: flex;
+  justify-content: space-between;
+}
+.spanclass {
+  display: flex;
+  background-color: #ffe4e1;
+  padding: 5px 10px;
+  border-radius: 30px;
+}

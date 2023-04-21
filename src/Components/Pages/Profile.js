@@ -24,7 +24,7 @@ const bearer_token = useSelector((state)=>state.auth.bearer_token);
         }
       );
       const data = await response.json();
-      console.log(data.users[0].displayName);
+      console.log(data);
       fullNameRef.current.value = data.users[0].displayName;
       urlRef.current.value = data.users[0].photoUrl;
     };
@@ -80,14 +80,13 @@ const bearer_token = useSelector((state)=>state.auth.bearer_token);
             display: "flex",
             backgroundColor: "#FFE4E1",
             padding: "5px 10px",
-            borderRadius: "10px",
+            borderRadius: "40px",
           }}
         >
           <span>
             <p>
               Your Profile is 64% completed.A complete Profile has higher chance
               of landing a job.
-              <span style={{ cursor: "pointer" }}>Complete Now</span>
             </p>
           </span>
         </div>

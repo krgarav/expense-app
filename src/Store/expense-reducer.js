@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-const initialExpenseState = { expense: [], totalAmount: 0 };
 
+const initialExpenseState = { expense: [], totalAmount: 0 };
 const expenseSlice = createSlice({
   name: "expense",
   initialState: initialExpenseState,
@@ -53,7 +53,7 @@ const expenseSlice = createSlice({
         postData();
         state.expense = expense;
         const length = state.expense.length;
-        let amount=0;
+        let amount = 0;
         for (let i = 0; i <= length - 1; i++) {
           amount += Number(state.expense[i].amount);
         }
@@ -91,6 +91,9 @@ const expenseSlice = createSlice({
         state.expense = expense;
       }
     },
+    addInitial(state,action){
+      state.expense=action.payload
+    }
   },
 });
 
