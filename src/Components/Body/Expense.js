@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Container, Form, ListGroup, Row } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, json } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../../Store/auth-reducer";
 import { expenseAction } from "../../Store/expense-reducer";
@@ -107,12 +107,16 @@ const Expense = () => {
     dispatch(expenseAction.removeExpense(description));
   };
   const toggleHandler = () => {
-    
     setDarkMode((prevInput) => !prevInput);
   };
-  const downloadHandler = ()=>{
-    fetch("https://expense-app-e491d.firebaseio/.json?download=expensefile.txt")
-  }
+
+  const gud = () => {
+    const transform = JSON.stringify(listItem);
+    const blob1 = new Blob([transform], { type: "application/json" });
+    const url = URL.createObjectURL(blob1);
+    return url;
+  };
+
   const listItems = listItem.map((item) => {
     return (
       <ListGroup.Item as="li" key={item.description}>
@@ -147,7 +151,7 @@ const Expense = () => {
               <NavLink to="/profile">Complete Now</NavLink>
             </p>
           </span>
-          {totalAmt > 10000 &&!showButton && (
+          {totalAmt > 10000 && !showButton && (
             <Button
               onClick={() => {
                 setShowButton((prevInput) => !prevInput);
@@ -157,15 +161,17 @@ const Expense = () => {
               Activate Premium
             </Button>
           )}
-          
+
           {showButton && (
-            <Form>
+            <Form method="GET" action="filename.txt">
               <Form.Check
                 type="switch"
                 label={darkMode ? "Light Mode" : "Dark Mode"}
                 onClick={toggleHandler}
               />
-              <Button onClick={downloadHandler} variant="outline-success">Download</Button>
+              <a href={gud()} download="file.txt">
+                <Button variant="outline-success">download</Button>
+              </a>
             </Form>
           )}
           <Button

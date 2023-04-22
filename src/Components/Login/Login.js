@@ -9,7 +9,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const [islogin, setIsLogin] = useState(true);
   const [show, setShow] = useState(false);
-
   const navigate = useNavigate();
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -106,7 +105,6 @@ const Login = () => {
         }}
       >
         <h3 style={{ textAlign: "center", padding: "10px" }}>
-          {" "}
           {islogin ? "Login" : "Sign up"}
         </h3>
         <Form onSubmit={submitHandler}>

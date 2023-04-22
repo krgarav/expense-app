@@ -91,9 +91,16 @@ const expenseSlice = createSlice({
         state.expense = expense;
       }
     },
-    addInitial(state,action){
-      state.expense=action.payload
-    }
+    addInitial(state, action) {
+      state.expense = action.payload;
+
+      const length = state.expense.length;
+      let amount = 0;
+      for (let i = 0; i <= length - 1; i++) {
+        amount += Number(state.expense[i].amount);
+      }
+      state.totalAmount = amount;
+    },
   },
 });
 
